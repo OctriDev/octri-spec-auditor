@@ -1,0 +1,9 @@
+.git
+target
+node_modules
+artifacts
+**/.build
+**/.dart_tool
+**/target
+packages/node/*.node
+packages/browser/pkg

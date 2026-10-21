@@ -1,0 +1,21 @@
+{
+  "name": "octri/spec-auditor",
+  "description": "Bindings for the offline Octri Rust Spec Auditor",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "require": {
+    "php": ">=8.1",
+    "ext-ffi": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Octri\\Audit\\": "src/"
+    }
+  },
+  "homepage": "https://github.com/octridev/octri-spec-auditor",
+  "support": {
+    "issues": "https://github.com/octridev/octri-spec-auditor/issues",
+    "source": "https://github.com/octridev/octri-spec-auditor"
+  }
+}

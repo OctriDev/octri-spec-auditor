@@ -1,0 +1,78 @@
+package dev.octri.auditor;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.IOException;
+
+/** Stateless synchronous transport. Use an application executor for large audits. */
+public final class Auditor {
+  private static final ObjectMapper JSON =
+      new ObjectMapper()
+          .enable(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS)
+          .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
+
+  public Auditor(String library, String bridge) {
+    NativeBridge.load(library, bridge);
+  }
+
+  public JsonNode call(JsonNode envelope) throws IOException {
+    byte[] input = JSON.writeValueAsBytes(envelope);
+    if (input.length > 128 * 1024 * 1024) {
+      throw new IllegalArgumentException("Auditor envelope exceeds 128 MiB");
+    }
+    return JSON.readTree(NativeBridge.call(input));
+  }
+
+  private JsonNode result(ObjectNode envelope) throws IOException {
+    envelope.put("abiVersion", 1);
+    JsonNode output = call(envelope);
+    if (output.has("Err")) {
+      throw new AuditException(output.get("Err"));
+    }
+    if (!output.has("Ok")) {
+      throw new IOException("Invalid auditor response envelope");
+    }
+    return output.get("Ok");
+  }
+
+  public JsonNode audit(JsonNode request) throws IOException {
+    ObjectNode envelope = JSON.createObjectNode().put("action", "audit");
+    envelope.set("request", request);
+    return result(envelope);
+  }
+
+  public JsonNode fix(JsonNode request) throws IOException {
+    ObjectNode envelope = JSON.createObjectNode().put("action", "fix");
+    envelope.set("request", request);
+    return result(envelope);
+  }
+
+  public JsonNode compare(JsonNode before, JsonNode after) throws IOException {
+    ObjectNode envelope = JSON.createObjectNode().put("action", "compare");
+    envelope.set("before", before);
+    envelope.set("after", after);
+    return result(envelope);
+  }
+
+  public JsonNode export(JsonNode report, String format) throws IOException {
+    ObjectNode envelope = JSON.createObjectNode().put("action", "export").put("format", format);
+    envelope.set("report", report);
+    return result(envelope);
+  }
+
+  public JsonNode rules() throws IOException {
+    return result(JSON.createObjectNode().put("action", "rules"));
+  }
+
+  public JsonNode bundle(JsonNode request) throws IOException {
+    ObjectNode envelope = JSON.createObjectNode().put("action", "bundle");
+    envelope.set("request", request);
+    return result(envelope);
+  }
+
+  public static ObjectNode text(String content, String uri) {
+    return JSON.createObjectNode().put("uri", uri).put("content", content).put("generated", false);
+  }
+}

@@ -1,0 +1,35 @@
+[workspace]
+members = ["crates/*", "vendor/octri-parser"]
+default-members = ["crates/octri-auditor", "crates/octri-auditor-cli"]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.2"
+edition = "2024"
+rust-version = "1.95"
+authors = ["Octri contributors"]
+repository = "https://github.com/octridev/octri-spec-auditor"
+publish = false
+license = "Apache-2.0"
+
+[workspace.dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0", features = ["unbounded_depth", "arbitrary_precision"] }
+url = { version = "2.5", features = ["serde"] }
+thiserror = "2.0"
+sha2 = "0.10"
+octri-parser = { path = "vendor/octri-parser" }
+octri-auditor = { path = "crates/octri-auditor" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+
+[profile.release]
+lto = "thin"
+strip = "debuginfo"

@@ -1,0 +1,40 @@
+{
+  "name": "octri-spec-auditor-workspace",
+  "version": "0.1.2",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.19"
+  },
+  "scripts": {
+    "format": "prettier --write '**/*.{mjs,cjs,ts,css,html,json,md,yml,yaml}'",
+    "format:check": "prettier --check '**/*.{mjs,cjs,ts,css,html,json,md,yml,yaml}'",
+    "build:node": "node scripts/build-node.mjs",
+    "build:wasm": "node scripts/build-wasm.mjs",
+    "build:bindings": "node scripts/build-bindings.mjs",
+    "test:bindings": "node scripts/test-bindings.mjs",
+    "test:node": "node --test packages/node/test.mjs",
+    "test:browser": "node web/browser-test.mjs",
+    "dev": "node web/serve.mjs",
+    "package:web": "node scripts/build-wasm.mjs && node scripts/package-web.mjs",
+    "check": "node scripts/cargo.mjs test --workspace"
+  },
+  "devDependencies": {
+    "@apidevtools/swagger-parser": "12.1.0",
+    "@axe-core/playwright": "4.14.0",
+    "@prettier/plugin-php": "0.25.0",
+    "ajv": "8.20.0",
+    "playwright": "1.64.1",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/octridev/octri-spec-auditor.git"
+  },
+  "homepage": "https://github.com/octridev/octri-spec-auditor#readme",
+  "bugs": {
+    "url": "https://github.com/octridev/octri-spec-auditor/issues"
+  },
+  "license": "Apache-2.0"
+}

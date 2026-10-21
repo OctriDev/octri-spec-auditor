@@ -1,0 +1,81 @@
+{
+  "openapi": "3.2.1",
+  "info": { "title": "Events API", "version": "1.0.0" },
+  "servers": [{ "url": "https://api.example.com", "name": "production" }],
+  "security": [],
+  "tags": [{ "name": "events", "kind": "nav" }],
+  "paths": {
+    "/events": {
+      "query": {
+        "summary": "Query events",
+        "tags": ["events"],
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "querystring",
+            "description": "Event filter",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" },
+                "examples": { "all": { "dataValue": {} } }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Event stream",
+            "content": {
+              "application/jsonl": {
+                "$ref": "#/components/mediaTypes/EventStream"
+              }
+            }
+          },
+          "400": { "description": "Invalid filter" }
+        }
+      },
+      "additionalOperations": {
+        "COPY": {
+          "operationId": "copyEvents",
+          "summary": "Copy events",
+          "tags": ["events"],
+          "responses": {
+            "200": {
+              "description": "Copied events",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": { "$ref": "#/components/schemas/Event" }
+                  },
+                  "examples": { "copied": { "dataValue": [{ "id": 1 }] } }
+                }
+              }
+            },
+            "400": { "description": "Invalid request" }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Event": {
+        "type": "object",
+        "properties": { "id": { "type": "integer", "minimum": 1 } }
+      }
+    },
+    "mediaTypes": {
+      "EventStream": {
+        "itemSchema": { "$ref": "#/components/schemas/Event" },
+        "examples": {
+          "events": {
+            "dataValue": [
+              { "id": 1, "$ref": "https://example.invalid/literal-data" }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

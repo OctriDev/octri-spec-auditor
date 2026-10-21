@@ -1,0 +1,41 @@
+name: Octri Spec Auditor
+description: Build the Rust auditor and produce an offline audit with policy-aware CI status.
+inputs:
+  spec:
+    description: Specification path in the checked-out consumer repository.
+    required: true
+  config:
+    description: Optional auditor configuration path.
+    default: ""
+  files:
+    description: JSON object mapping virtual dependency URIs to local file paths.
+    default: "{}"
+  baseline:
+    description: Optional version-matched baseline path.
+    default: ""
+  fail-on-new:
+    description: Fail only for new findings at the configured severity threshold. Requires baseline.
+    default: "false"
+outputs:
+  report:
+    description: Absolute JSON report path.
+    value: ${{ steps.audit.outputs.report }}
+  sarif:
+    description: Absolute SARIF report path, suitable for a separately authorized upload step.
+    value: ${{ steps.audit.outputs.sarif }}
+  score:
+    description: Score from 0 to 10. Check complete before treating score as readiness.
+    value: ${{ steps.audit.outputs.score }}
+runs:
+  using: composite
+  steps:
+    - id: audit
+      shell: bash
+      env:
+        AUDITOR_ACTION_PATH: ${{ github.action_path }}
+        AUDITOR_SPEC: ${{ inputs.spec }}
+        AUDITOR_CONFIG: ${{ inputs.config }}
+        AUDITOR_FILES: ${{ inputs.files }}
+        AUDITOR_BASELINE: ${{ inputs.baseline }}
+        AUDITOR_FAIL_NEW: ${{ inputs.fail-on-new }}
+      run: node "$AUDITOR_ACTION_PATH/run.mjs"

@@ -1,0 +1,68 @@
+{
+  "name": "@octri/spec-auditor-native",
+  "version": "0.1.4",
+  "license": "Apache-2.0",
+  "files": [
+    "index.mjs",
+    "index.cjs",
+    "index.d.ts",
+    "index.d.cts",
+    "client.mjs",
+    "json.mjs",
+    "numbers.mjs",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md",
+    "OAI-LICENSE",
+    "README.md",
+    "load-native.cjs"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./index.d.ts",
+        "default": "./index.mjs"
+      },
+      "require": {
+        "types": "./index.d.cts",
+        "default": "./index.cjs"
+      }
+    }
+  },
+  "engines": {
+    "node": ">=22.19"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/octridev/octri-spec-auditor.git",
+    "directory": "packages/node"
+  },
+  "homepage": "https://github.com/octridev/octri-spec-auditor#readme",
+  "bugs": {
+    "url": "https://github.com/octridev/octri-spec-auditor/issues"
+  },
+  "keywords": [
+    "openapi",
+    "swagger",
+    "rust",
+    "api",
+    "specification",
+    "spec-auditor",
+    "audit",
+    "lint",
+    "api-quality",
+    "sarif",
+    "node-api",
+    "native",
+    "nodejs"
+  ],
+  "description": "Node.js native bindings for Octri Spec Auditor, powered by Rust.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "optionalDependencies": {
+    "@octri/spec-auditor-native-darwin-arm64": "0.1.4",
+    "@octri/spec-auditor-native-linux-x64": "0.1.4",
+    "@octri/spec-auditor-native-linux-arm64": "0.1.4"
+  }
+}

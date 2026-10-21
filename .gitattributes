@@ -1,0 +1,7 @@
+# Normalize authored source; preserve vendored, fixture and notice hashes.
+* text=auto eol=lf
+vendor/** -text whitespace=cr-at-eol
+fixtures/** -text whitespace=cr-at-eol
+**/THIRD-PARTY-NOTICES.md -text whitespace=cr-at-eol
+*.wasm binary
+*.node binary

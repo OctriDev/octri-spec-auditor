@@ -1,0 +1,52 @@
+{
+  "name": "@octri/spec-auditor-wasm",
+  "version": "0.1.4",
+  "license": "Apache-2.0",
+  "files": [
+    "index.mjs",
+    "index.d.ts",
+    "client.mjs",
+    "json.mjs",
+    "numbers.mjs",
+    "pkg",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md",
+    "OAI-LICENSE",
+    "README.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.mjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/octridev/octri-spec-auditor.git",
+    "directory": "packages/browser"
+  },
+  "homepage": "https://github.com/octridev/octri-spec-auditor#readme",
+  "bugs": {
+    "url": "https://github.com/octridev/octri-spec-auditor/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "openapi",
+    "swagger",
+    "rust",
+    "api",
+    "specification",
+    "spec-auditor",
+    "audit",
+    "lint",
+    "api-quality",
+    "sarif",
+    "webassembly",
+    "wasm",
+    "browser"
+  ],
+  "description": "Browser WebAssembly bindings for Octri Spec Auditor, powered by Rust."
+}

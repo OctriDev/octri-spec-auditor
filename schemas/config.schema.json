@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://octri.com/contracts/spec-auditor/config/1.0.0",
+  "title": "Octri Spec Auditor configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 32,
+      "items": {
+        "enum": [
+          "docs",
+          "sdk",
+          "mcp",
+          "sdk-typescript",
+          "sdk-python",
+          "sdk-rust",
+          "sdk-dart",
+          "sdk-ruby",
+          "sdk-php",
+          "sdk-swift",
+          "sdk-java",
+          "sdk-kotlin",
+          "sdk-go"
+        ]
+      }
+    },
+    "rules": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "enabled": { "type": ["boolean", "null"] },
+          "severity": { "enum": ["high", "medium", "advice", null] }
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxDocumentBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 25165824
+        },
+        "maxTotalBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 67108864
+        },
+        "maxDocuments": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "maxNodes": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "maxDepth": { "type": "integer", "minimum": 1, "maximum": 128 }
+      }
+    },
+    "ignored": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": { "type": "string" }
+    },
+    "exclusions": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ruleId", "reason"],
+        "properties": {
+          "ruleId": { "type": "string" },
+          "reason": { "type": "string", "pattern": "\\S" },
+          "key": { "type": ["string", "null"] },
+          "uri": { "type": ["string", "null"] },
+          "pointer": { "type": ["string", "null"] },
+          "expiresOn": {
+            "type": ["string", "null"],
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          }
+        }
+      }
+    },
+    "baseline": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["schemaVersion", "rulesetVersion", "fingerprints"],
+          "properties": {
+            "schemaVersion": { "const": "1.0.0" },
+            "rulesetVersion": { "const": "1.0.0" },
+            "fingerprints": {
+              "type": "array",
+              "maxItems": 10000,
+              "items": { "type": "string", "pattern": "^[a-fA-F0-9]{64}$" }
+            }
+          }
+        }
+      ]
+    },
+    "failOnNew": { "type": "boolean" },
+    "failOn": { "enum": ["high", "medium", "advice"] },
+    "asOf": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "maxFindings": { "type": "integer", "minimum": 1, "maximum": 10000 }
+  },
+  "$comment": "Rust remains authoritative for known rule IDs, mandatory integrity, valid calendar dates and expiry/baseline dependencies. JSON Schema provides editor structural validation."
+}

@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://octri.com/contracts/spec-auditor/report/1.0.0",
+  "title": "Octri Spec Auditor report 1.0.0",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "manifest",
+    "valid",
+    "complete",
+    "status",
+    "score",
+    "maxScore",
+    "findings",
+    "ignoredFindings",
+    "appliedFindings",
+    "byRule",
+    "surface",
+    "diagnostics",
+    "views",
+    "policyPassed",
+    "coverage"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0.0" },
+    "manifest": {
+      "type": "object",
+      "required": [
+        "engineVersion",
+        "rulesetVersion",
+        "scoreMethod",
+        "processingMode",
+        "root",
+        "files",
+        "config",
+        "profiles"
+      ],
+      "properties": {
+        "engineVersion": { "type": "string" },
+        "rulesetVersion": { "const": "1.0.2" },
+        "scoreMethod": { "const": "octri-10-point/1" },
+        "processingMode": { "const": "local-offline" },
+        "root": { "type": "string" },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["uri", "sha256", "bytes"],
+            "properties": {
+              "uri": { "type": "string" },
+              "sha256": { "$ref": "#/$defs/hash" },
+              "bytes": { "$ref": "#/$defs/count" }
+            }
+          }
+        },
+        "config": { "type": "object" },
+        "profiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "version",
+              "evidence",
+              "executedVerification",
+              "limitations"
+            ],
+            "properties": {
+              "id": { "type": "string" },
+              "version": { "type": "string" },
+              "evidence": { "const": "static-analysis" },
+              "executedVerification": { "const": "unknown" },
+              "limitations": { "$ref": "#/$defs/strings" }
+            }
+          }
+        }
+      }
+    },
+    "valid": { "type": "boolean" },
+    "complete": { "type": "boolean" },
+    "status": { "enum": ["checked", "needs-review", "blocked"] },
+    "score": { "type": "number", "minimum": 0, "maximum": 10 },
+    "maxScore": { "const": 10 },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "ignoredFindings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "appliedFindings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/finding" }
+    },
+    "byRule": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "ruleId",
+          "weight",
+          "findings",
+          "denominator",
+          "deduction",
+          "status"
+        ],
+        "properties": {
+          "ruleId": { "type": "string" },
+          "weight": { "type": "number", "minimum": 0 },
+          "findings": { "$ref": "#/$defs/count" },
+          "denominator": { "$ref": "#/$defs/count" },
+          "deduction": { "type": "number", "minimum": 0 },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    "surface": {
+      "type": "object",
+      "required": ["operations", "models", "paths", "schemas"],
+      "properties": {
+        "operations": { "$ref": "#/$defs/count" },
+        "models": { "$ref": "#/$defs/count" },
+        "paths": { "$ref": "#/$defs/count" },
+        "schemas": { "$ref": "#/$defs/count" }
+      }
+    },
+    "diagnostics": { "type": "array" },
+    "views": { "type": "array", "minItems": 4, "maxItems": 4 },
+    "policyPassed": { "type": "boolean" },
+    "coverage": { "$ref": "#/$defs/strings" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "complete": { "const": false } } },
+      "then": {
+        "properties": {
+          "score": { "const": 0 },
+          "status": { "const": "blocked" },
+          "policyPassed": { "const": false }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "count": { "type": "integer", "minimum": 0 },
+    "strings": { "type": "array", "items": { "type": "string" } },
+    "location": {
+      "type": "object",
+      "required": ["uri", "pointer"],
+      "properties": {
+        "uri": { "type": "string" },
+        "pointer": { "type": "string" },
+        "line": { "type": "integer", "minimum": 1 },
+        "column": { "type": "integer", "minimum": 1 },
+        "offset": { "$ref": "#/$defs/count" }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "required": [
+        "key",
+        "fingerprint",
+        "ruleId",
+        "title",
+        "why",
+        "severity",
+        "target",
+        "message",
+        "fixable",
+        "ignorable",
+        "location",
+        "related",
+        "categories",
+        "impact",
+        "evidence",
+        "remediation",
+        "baseline"
+      ],
+      "properties": {
+        "key": { "type": "string" },
+        "fingerprint": { "$ref": "#/$defs/hash" },
+        "ruleId": { "type": "string" },
+        "title": { "type": "string" },
+        "why": { "type": "string" },
+        "severity": { "enum": ["high", "medium", "advice"] },
+        "target": { "type": "string" },
+        "message": { "type": "string" },
+        "fixable": { "type": "boolean" },
+        "ignorable": { "type": "boolean" },
+        "location": { "$ref": "#/$defs/location" },
+        "related": { "type": "array", "items": { "$ref": "#/$defs/location" } },
+        "categories": {
+          "type": "array",
+          "items": { "enum": ["integrity", "docs", "sdk", "mcp"] }
+        },
+        "impact": { "type": "string" },
+        "evidence": { "const": "static-analysis" },
+        "remediation": { "type": "string" },
+        "baseline": { "type": "boolean" }
+      }
+    }
+  }
+}

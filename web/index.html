@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Spec Auditor · Octri</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <a class="skip" href="#source">Skip to specification</a>
+    <header>
+      <a class="brand" href="https://octri.dev" target="_blank" rel="noreferrer"
+        >Octri<span>/ Spec Auditor</span></a
+      >
+      <span class="processing">Local processing · no account</span>
+    </header>
+    <main>
+      <div class="intro">
+        <div>
+          <h1>Make your spec dependable.</h1>
+          <p>
+            Find what affects docs, SDKs and MCP. Review the evidence. Keep your
+            files.
+          </p>
+        </div>
+        <button id="sample" class="secondary">Load sample</button>
+      </div>
+      <div class="workspace">
+        <section class="source-panel" aria-labelledby="source-title">
+          <div class="panel-heading">
+            <h2 id="source-title">Specification</h2>
+            <label class="button secondary"
+              >Add files<input
+                id="upload"
+                type="file"
+                accept=".yaml,.yml,.json"
+                multiple
+            /></label>
+            <label class="button secondary"
+              >Add folder<input
+                id="upload-folder"
+                type="file"
+                webkitdirectory
+                multiple
+            /></label>
+          </div>
+          <label for="root">Root document</label
+          ><select id="root">
+            <option value="memory://audit/openapi.yaml">openapi.yaml</option>
+          </select>
+          <label for="active-file">Source file</label
+          ><select id="active-file">
+            <option value="memory://audit/openapi.yaml">openapi.yaml</option>
+          </select>
+          <label class="source-label" for="source"
+            ><span id="source-name">openapi.yaml</span
+            ><span id="source-position">JSON or YAML</span></label
+          >
+          <textarea
+            id="source"
+            spellcheck="false"
+            autocapitalize="off"
+            autocomplete="off"
+            aria-describedby="input-limits"
+            placeholder="Paste your OpenAPI specification (3.0, 3.1 or 3.2)…"
+          ></textarea>
+          <p id="input-limits" class="muted small">
+            5 MiB per file · 100 files · 20 MiB total. References resolve only
+            within supplied files. Source stays on this device.
+          </p>
+          <div class="run-row">
+            <button id="audit" class="primary">Audit specification</button
+            ><button id="cancel" hidden>Cancel</button
+            ><button id="undo" class="secondary" disabled>Undo patch</button>
+          </div>
+          <progress
+            id="progress"
+            aria-label="Auditing specification"
+            hidden
+          ></progress>
+          <p id="status" role="status" aria-live="polite">
+            Ready for your specification.
+          </p>
+          <div id="error" role="alert" hidden></div>
+          <details>
+            <summary>Profiles and team policy</summary>
+            <label for="preset">Policy preset</label
+            ><select id="preset">
+              <option value="all">All readiness views</option>
+              <option value="strict">Strict CI</option>
+              <option value="docs">Docs</option>
+              <option value="sdk">All SDK languages</option>
+              <option value="mcp">MCP</option>
+            </select>
+            <fieldset id="sdk-profiles">
+              <legend>SDK language profiles</legend>
+            </fieldset>
+            <label for="config">Configuration JSON</label
+            ><textarea id="config" spellcheck="false" rows="8">{}</textarea>
+            <p class="muted small">
+              Select SDK targets with profiles such as sdk-python or sdk-go.
+              Exclusions require reasons; expiries require an explicit asOf
+              date. Integrity cannot be suppressed.
+            </p>
+            <div class="toolbar">
+              <label class="button secondary"
+                >Load baseline<input
+                  id="baseline"
+                  type="file"
+                  accept=".json" /></label
+              ><button id="download-config" class="secondary">
+                Download policy
+              </button>
+            </div>
+            <label class="checkbox"
+              ><input id="fail-new" type="checkbox" />Fail only on new findings
+              against baseline</label
+            >
+          </details>
+          <details>
+            <summary>Fetch a URL</summary>
+            <p id="network-note" class="muted small">
+              Explicit network access. Your browser fetches this URL directly;
+              the host must allow CORS. Referenced URLs are never fetched
+              automatically. If the host blocks access, download the file and
+              upload it instead.
+            </p>
+            <label for="url">Specification URL</label
+            ><input
+              id="url"
+              type="url"
+              placeholder="https://example.com/openapi.yaml"
+            />
+            <label class="checkbox"
+              ><input id="allow-network" type="checkbox" /><span
+                id="network-label"
+                >Allow this browser to fetch this URL</span
+              ></label
+            ><button id="fetch-url" class="secondary">Fetch source</button>
+          </details>
+          <details>
+            <summary>Session on this device</summary>
+            <p class="muted small">
+              Saving stores specification content in this browser. Use only on a
+              trusted device. Nothing is saved until you choose Save.
+            </p>
+            <div class="toolbar">
+              <button id="save-session" class="secondary">Save session</button
+              ><button id="restore-session" class="secondary">
+                Restore session</button
+              ><button id="delete-session" class="secondary">
+                Delete saved session
+              </button>
+            </div>
+          </details>
+        </section>
+        <section class="results-panel" aria-labelledby="results-title">
+          <div class="panel-heading">
+            <h2 id="results-title">Audit report</h2>
+            <span id="engine-version" class="muted small">Rust engine</span>
+          </div>
+          <div id="empty">
+            <h3>A useful report starts with your source.</h3>
+            <p>
+              Paste or upload a spec, or load the sample. You’ll see blockers,
+              downstream impact and precise source locations.
+            </p>
+            <p class="muted small">
+              Checks use static analysis. Executed docs, SDK and MCP
+              verification is identified separately.
+            </p>
+          </div>
+          <div id="report" hidden>
+            <div class="report-summary">
+              <strong id="score"></strong>
+              <div>
+                <h3 id="report-state"></h3>
+                <p id="report-summary" class="muted"></p>
+              </div>
+            </div>
+            <nav id="views" aria-label="Readiness views"></nav>
+            <div class="filters">
+              <div>
+                <label for="severity">Severity</label
+                ><select id="severity">
+                  <option value="all">All severities</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="advice">Advice</option>
+                </select>
+              </div>
+              <div>
+                <label for="search">Filter findings</label
+                ><input
+                  id="search"
+                  type="search"
+                  placeholder="Rule, operation, file or text"
+                />
+              </div>
+            </div>
+            <div class="selection-bar">
+              <span id="finding-count"></span
+              ><button id="preview" class="primary" disabled>
+                Preview selected patches
+              </button>
+            </div>
+            <div id="findings"></div>
+            <section
+              id="patch-preview"
+              class="review"
+              hidden
+              tabindex="-1"
+              aria-labelledby="patch-title"
+            >
+              <h3 id="patch-title">Review selected patches</h3>
+              <p id="format-notice"></p>
+              <pre id="patch-content"></pre>
+              <div class="toolbar">
+                <button id="apply-patch" class="primary">
+                  Apply reviewed patches</button
+                ><button id="dismiss-patch" class="secondary">
+                  Discard preview
+                </button>
+              </div>
+            </section>
+            <section
+              id="comparison"
+              class="review"
+              hidden
+              aria-labelledby="comparison-title"
+            >
+              <h3 id="comparison-title">Change review</h3>
+              <div id="comparison-result"></div>
+            </section>
+            <details>
+              <summary>Scoring and check coverage</summary>
+              <p class="small muted">
+                10-point scale. Each failed scored rule deducts weight × (0.2 +
+                0.8 × min(1, findings / denominator)). Integrity failures block
+                the score. Zero-weight diagnostics still need review.
+              </p>
+              <div class="table-scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Rule</th>
+                      <th>Status</th>
+                      <th>Weight</th>
+                      <th>Count / denominator</th>
+                      <th>Deduction</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rule-results"></tbody>
+                </table>
+              </div>
+              <ul id="coverage"></ul>
+              <div id="profiles"></div>
+            </details>
+            <details>
+              <summary>Excluded findings</summary>
+              <div id="ignored"></div>
+            </details>
+            <details>
+              <summary>Artifact and source hashes</summary>
+              <pre id="manifest"></pre>
+            </details>
+            <section class="exports" aria-labelledby="exports-title">
+              <h3 id="exports-title">Take your work with you</h3>
+              <div class="toolbar">
+                <button data-export="json">JSON report</button
+                ><button data-export="html">HTML report</button
+                ><button data-export="sarif">SARIF</button
+                ><button data-export="annotations">CI annotations</button
+                ><button data-export="baseline">Baseline</button
+                ><button id="download-original">Original source</button
+                ><button id="download-revised" disabled>Revised source</button
+                ><button id="download-patch" disabled>Patch</button
+                ><button id="download-artifact">Complete artifact</button
+                ><label class="button secondary"
+                  >Compare earlier report<input
+                    id="compare"
+                    type="file"
+                    accept=".json" /></label
+                ><button id="handoff" hidden>
+                  Use reviewed source in Octri
+                </button>
+              </div>
+            </section>
+          </div>
+        </section>
+      </div>
+      <footer>
+        <span
+          >Private by default. No telemetry, API key or automatic
+          publication.</span
+        ><span>OpenAPI 3.0.x / 3.1.x / 3.2.x · Static analysis</span>
+      </footer>
+    </main>
+    <script type="module" src="./app.mjs"></script>
+  </body>
+</html>

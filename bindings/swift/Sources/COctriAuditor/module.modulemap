@@ -1,0 +1,5 @@
+module COctriAuditor [system] {
+  header "include/octri_auditor.h"
+  link "octri_auditor_ffi"
+  export *
+}

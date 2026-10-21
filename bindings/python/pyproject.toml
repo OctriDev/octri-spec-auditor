@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "octri-spec-auditor"
+version = "0.1.0"
+description = "Python bindings for the offline Octri Rust Spec Auditor"
+requires-python = ">=3.8"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.urls]
+Repository = "https://github.com/octridev/octri-spec-auditor"
+Issues = "https://github.com/octridev/octri-spec-auditor/issues"

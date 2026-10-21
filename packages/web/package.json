@@ -1,0 +1,45 @@
+{
+  "name": "@octri/spec-auditor-web",
+  "version": "0.1.4",
+  "description": "Complete offline browser UI for Octri Spec Auditor, including WebAssembly and integrity manifests.",
+  "private": false,
+  "license": "Apache-2.0",
+  "type": "module",
+  "files": [
+    "web",
+    "packages",
+    "fixtures",
+    "vendor",
+    "LICENSE",
+    "THIRD-PARTY-NOTICES.md",
+    "manifest.json",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/octridev/octri-spec-auditor.git",
+    "directory": "packages/web"
+  },
+  "homepage": "https://github.com/octridev/octri-spec-auditor#readme",
+  "bugs": {
+    "url": "https://github.com/octridev/octri-spec-auditor/issues"
+  },
+  "keywords": [
+    "openapi",
+    "swagger",
+    "rust",
+    "api",
+    "specification",
+    "spec-auditor",
+    "audit",
+    "lint",
+    "api-quality",
+    "sarif",
+    "static-site",
+    "browser",
+    "offline"
+  ]
+}
