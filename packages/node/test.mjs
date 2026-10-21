@@ -37,8 +37,12 @@ test("semantic action verbs survive every native audit and repair", async () => 
     ["findPetsByTags", undefined],
     ["findPetsByStatus", undefined],
     ["getFindings", undefined],
+    ["loginUser", undefined],
+    ["logoutUser", undefined],
+    ["placeOrder", undefined],
+    ["ProvisionGetToken", undefined],
     ["getFindPetsByTags", "findPetsByTags"],
-    ["PetsByTagsFind", "findPetsByTags"],
+    ["PetsByTagsFind", undefined],
   ]) {
     clean.paths["/pets"].get.operationId = id;
     const request = { input: object(clean) };

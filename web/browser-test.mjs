@@ -71,6 +71,10 @@ try {
         for (const [id, proposal] of [
           ["findPetsByTags", undefined],
           ["findPetsByStatus", undefined],
+          ["loginUser", undefined],
+          ["logoutUser", undefined],
+          ["placeOrder", undefined],
+          ["ProvisionGetToken", undefined],
           ["getFindPetsByTags", "findPetsByTags"],
         ]) {
           const document = {

@@ -99,22 +99,28 @@ const envelopes = [
     },
   },
   auditEnvelope,
-  ...["findPetsByTags", "getFindPetsByTags", "PetsByTagsFind"].map(
-    (operationId) => {
-      const document = JSON.parse(readFileSync("fixtures/clean.json", "utf8"));
-      document.paths["/pets"].get.operationId = operationId;
-      return {
-        abiVersion: 1,
-        action: "audit",
-        request: {
-          input: {
-            uri: "memory://audit/naming.json",
-            content: JSON.stringify(document),
-          },
+  ...[
+    "findPetsByTags",
+    "getFindPetsByTags",
+    "PetsByTagsFind",
+    "loginUser",
+    "logoutUser",
+    "placeOrder",
+    "ProvisionGetToken",
+  ].map((operationId) => {
+    const document = JSON.parse(readFileSync("fixtures/clean.json", "utf8"));
+    document.paths["/pets"].get.operationId = operationId;
+    return {
+      abiVersion: 1,
+      action: "audit",
+      request: {
+        input: {
+          uri: "memory://audit/naming.json",
+          content: JSON.stringify(document),
         },
-      };
-    },
-  ),
+      },
+    };
+  }),
   { ...auditEnvelope, request: failing },
   { ...auditEnvelope, request: { input: { ...request.input, content: "{" } } },
   {

@@ -1,6 +1,6 @@
 {
   "name": "@octri/spec-auditor-native",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "license": "Apache-2.0",
   "files": [
     "index.mjs",
@@ -61,8 +61,8 @@
     "access": "public"
   },
   "optionalDependencies": {
-    "@octri/spec-auditor-native-darwin-arm64": "0.1.5",
-    "@octri/spec-auditor-native-linux-x64": "0.1.5",
-    "@octri/spec-auditor-native-linux-arm64": "0.1.5"
+    "@octri/spec-auditor-native-darwin-arm64": "0.1.6",
+    "@octri/spec-auditor-native-linux-x64": "0.1.6",
+    "@octri/spec-auditor-native-linux-arm64": "0.1.6"
   }
 }

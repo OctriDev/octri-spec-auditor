@@ -37,7 +37,7 @@ files.push("THIRD-PARTY-NOTICES.md");
 files.push("vendor/octri-parser/schemas/OAI-LICENSE");
 const manifest = {
   engineVersion: JSON.parse(readFileSync("package.json", "utf8")).version,
-  rulesetVersion: "1.0.2",
+  rulesetVersion: "1.0.3",
   scoreMethod: "octri-10-point/1",
   files: {},
 };
