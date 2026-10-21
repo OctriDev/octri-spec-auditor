@@ -1,5 +1,7 @@
 # Octri Spec Auditor — Node.js
 
+[Live demo](https://octri.dev/openapi-audit) · Free to try in your browser, no account required.
+
 Audit OpenAPI documents for API readiness, inspect source-aware findings, and apply reviewed fixes through the same Rust engine used by the CLI.
 
 Part of [octri-spec-auditor](https://github.com/octridev/octri-spec-auditor), maintained by [OctriDev](https://github.com/octridev). Licensed under Apache-2.0. Bundled dependencies retain their own licenses and notices.

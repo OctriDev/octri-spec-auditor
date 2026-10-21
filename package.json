@@ -32,7 +32,7 @@
     "type": "git",
     "url": "https://github.com/octridev/octri-spec-auditor.git"
   },
-  "homepage": "https://github.com/octridev/octri-spec-auditor#readme",
+  "homepage": "https://octri.dev/openapi-audit",
   "bugs": {
     "url": "https://github.com/octridev/octri-spec-auditor/issues"
   },

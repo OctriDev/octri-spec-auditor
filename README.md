@@ -1,5 +1,7 @@
 # Octri Spec Auditor
 
+[Live demo](https://octri.dev/openapi-audit) · Free to try in your browser, no account required.
+
 An offline OpenAPI readiness auditor written in Rust. The same engine powers the CLI, browser worker and every language binding. It uses the Octri Rust parser vendored in `vendor/octri-parser`.
 
 Maintained by [OctriDev](https://github.com/octridev). Build from source or use platform-matched release artifacts. Licensed under [Apache-2.0](LICENSE); third-party components retain their own licenses.
