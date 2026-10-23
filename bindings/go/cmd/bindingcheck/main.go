@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	auditor "github.com/octridev/octri-spec-auditor/bindings/go"
+	auditor "github.com/octridev/octri-spec-auditor-go"
 	"io"
 	"os"
 )

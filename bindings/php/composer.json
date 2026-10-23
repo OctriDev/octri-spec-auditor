@@ -1,7 +1,12 @@
 {
   "name": "octri/spec-auditor",
   "description": "Bindings for the offline Octri Rust Spec Auditor",
-  "version": "0.1.0",
+  "keywords": [
+    "openapi",
+    "swagger",
+    "audit",
+    "linter"
+  ],
   "license": "Apache-2.0",
   "require": {
     "php": ">=8.1",

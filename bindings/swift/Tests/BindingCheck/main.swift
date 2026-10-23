@@ -2,7 +2,7 @@ import Foundation
 import OctriSpecAuditor
 
 let envelope = try JSONValue.decode(FileHandle.standardInput.readDataToEndOfFile())
-let auditor = try Auditor()
+let auditor = try Auditor(library: CommandLine.arguments[1])
 let response: JSONValue
 if envelope["abiVersion"] == .integer(1), let action = envelope["action"],
    [.string("audit"), .string("fix"), .string("bundle"), .string("compare"), .string("export"), .string("rules")].contains(action) {

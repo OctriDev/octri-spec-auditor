@@ -21,8 +21,9 @@ The complete static browser product is `@octri/spec-auditor-web`.
 
 Package READMEs contain installation examples and hosting requirements. Npm
 wrapper patch versions can differ from the engine version recorded in results.
-Other language registries are separate distribution targets; source-build
-instructions remain below.
+Python, Ruby, PHP, Go, Java, Kotlin, Swift, Dart and Rust packages are on their
+own registries and bundle the native library for the same platforms; see
+[Bindings](#bindings). Source-build instructions remain below.
 
 ## Run locally
 
@@ -102,7 +103,7 @@ Expiry is inclusive and evaluated against caller-supplied `asOf`; the core has n
 
 ## Bindings
 
-All bindings expose `audit`, `fix`, `compare`, `export`, `rules` and `bundle` through ABI-v1 JSON. Rust calls the typed core directly. Native consumers load an explicitly supplied library path; C buffers must be released with the matching auditor allocator.
+All bindings expose `audit`, `fix`, `compare`, `export`, `rules` and `bundle` through ABI-v1 JSON. Rust calls the typed core directly. Every native package carries the library for Linux x64 and arm64 (glibc 2.36 or later) and macOS arm64, and its no-argument constructor loads that copy; pass a library path to use one you built. C buffers must be released with the matching auditor allocator.
 
 JavaScript decoded reports represent exact integers beyond `Number.MAX_SAFE_INTEGER` as `bigint`. Use exported `parseJson` / `stringifyJson` helpers when storing those reports, or `Auditor.executeJson` for raw JSON envelopes/results. PHP and Dart also expose raw JSON transport. Source text and Rust-produced revised source retain their numeric values; browser-authored schemas are sent as `schemaJson` text to Rust rather than parsed into JavaScript numbers. Current browser support requires lossless JSON source parsing and `JSON.rawJSON` for these exceptional numeric values; unsupported runtimes fail explicitly instead of rounding them.
 
@@ -110,20 +111,26 @@ Ruby decodes decimals as `BigDecimal`. Use the bundled `OctriExactJSON.parse`
 and `OctriExactJSON.generate` helpers when reading or storing decoded reports;
 Ruby's standard JSON serializer can turn `BigDecimal` values into strings.
 
-| Consumer                | Package / entry point                | Runtime floor                |
-| ----------------------- | ------------------------------------ | ---------------------------- |
-| Rust                    | `crates/octri-auditor`               | Rust 1.95                    |
-| JavaScript / TypeScript | `packages/node` (ESM + CommonJS)     | Node 22.19                   |
-| Browser                 | `packages/browser`                   | WebAssembly + module workers |
-| Python                  | `bindings/python`                    | Python 3.8                   |
-| Go                      | `bindings/go`                        | Go 1.23, cgo                 |
-| Java                    | `bindings/java`                      | JVM 11, JNI bridge           |
-| Kotlin                  | `bindings/kotlin`                    | JVM 11, Java binding         |
-| PHP                     | `bindings/php`                       | PHP 8.1, FFI enabled         |
-| Ruby                    | `bindings/ruby`                      | Ruby 3.1, Fiddle             |
-| Swift                   | `bindings/swift`                     | Swift 6, macOS 13 or Linux   |
-| Dart                    | `bindings/dart`                      | Dart 3.4, dart:ffi           |
-| C                       | `bindings/c/include/octri_auditor.h` | C11                          |
+| Consumer                | Package                                                | Runtime floor                |
+| ----------------------- | ------------------------------------------------------ | ---------------------------- |
+| Rust                    | `octri-auditor` on crates.io                           | Rust 1.95                    |
+| JavaScript / TypeScript | `@octri/spec-auditor-native` (ESM + CommonJS)          | Node 22.19                   |
+| Browser                 | `@octri/spec-auditor-wasm`                             | WebAssembly + module workers |
+| Python                  | `octri-spec-auditor` on PyPI                           | Python 3.8                   |
+| Go                      | `github.com/octridev/octri-spec-auditor-go`            | Go 1.23, cgo                 |
+| Java                    | `dev.octri:spec-auditor` on Maven Central              | JVM 11, JNI bridge           |
+| Kotlin                  | `dev.octri:spec-auditor-kotlin` on Maven Central       | JVM 11, Java binding         |
+| PHP                     | `octri/spec-auditor` on Packagist                      | PHP 8.1, FFI enabled         |
+| Ruby                    | `octri-spec-auditor` on RubyGems                       | Ruby 3.1, Fiddle             |
+| Swift                   | `https://github.com/octridev/octri-spec-auditor-swift` | Swift 6, macOS 13 or Linux   |
+| Dart                    | `octri_spec_auditor` on pub.dev                        | Dart 3.4, dart:ffi           |
+| C                       | Header and libraries on each GitHub release            | C11                          |
+
+Go, PHP and Swift install from git, so their packages live in mirror repositories
+that the `Release language packages` workflow updates; their sources are
+maintained under `bindings/`. That workflow builds the native library on each
+platform, assembles every package, installs each one with its package manager on
+each platform, and publishes when a `v<version>` tag is pushed.
 
 ```js
 import Auditor, { text } from "@octri/spec-auditor-native";
@@ -135,7 +142,7 @@ if (!report.complete) throw new Error("Readiness could not be established");
 
 ```python
 from octri_auditor import Auditor
-auditor = Auditor('/absolute/path/liboctri_auditor_ffi.so')
+auditor = Auditor()  # or Auditor('/absolute/path/liboctri_auditor_ffi.so')
 report = auditor.audit({'input': {'uri': 'memory://audit/api.yaml', 'content': source}})
 ```
 
