@@ -37,7 +37,7 @@
       ],
       "properties": {
         "engineVersion": { "type": "string" },
-        "rulesetVersion": { "const": "1.0.2" },
+        "rulesetVersion": { "const": "1.0.3" },
         "scoreMethod": { "const": "octri-10-point/1" },
         "processingMode": { "const": "local-offline" },
         "root": { "type": "string" },
