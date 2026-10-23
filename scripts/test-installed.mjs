@@ -11,6 +11,7 @@ import {
 import { tmpdir } from "node:os";
 import { delimiter, join, resolve } from "node:path";
 import { rustEnvironment } from "./toolchain.mjs";
+import { version } from "./native-build.mjs";
 
 const directory = mkdtempSync(join(tmpdir(), "octri-auditor-consumer-"));
 try {
@@ -96,7 +97,9 @@ try {
       "--no-deps",
       "--target",
       join(directory, "python"),
-      resolve("artifacts/releases/octri_spec_auditor-0.1.0-py3-none-any.whl"),
+      resolve(
+        `artifacts/releases/octri_spec_auditor-${version}-py3-none-any.whl`,
+      ),
     ],
     { stdio: "inherit" },
   );
@@ -120,7 +123,7 @@ try {
     "-xzf",
     join(
       release,
-      `octri-spec-auditor-0.1.0-${process.platform}-${process.arch}.tar.gz`,
+      `octri-spec-auditor-${version}-${process.platform}-${process.arch}.tar.gz`,
     ),
     "-C",
     directory,
@@ -177,10 +180,12 @@ try {
   run("gem", [
     "install",
     "--local",
+    // Its dependencies come from the host Ruby; release-verify.mjs resolves them.
+    "--ignore-dependencies",
     "--no-document",
     "--install-dir",
     gems,
-    join(release, "octri-spec-auditor-0.1.0.gem"),
+    join(release, `octri-spec-auditor-${version}.gem`),
   ]);
   const gemPaths = execFileSync(
     "ruby",
@@ -226,8 +231,8 @@ try {
   check("Go module", join(directory, "go-consumer"), []);
   const java = join(build.javaHome, "bin/java");
   const classpath = [
-    join(release, "spec-auditor-0.1.0.jar"),
-    join(release, "spec-auditor-kotlin-0.1.0.jar"),
+    join(release, `spec-auditor-${version}.jar`),
+    join(release, `spec-auditor-kotlin-${version}.jar`),
     build.javaDependencies,
   ].join(delimiter);
   run(join(build.javaHome, "bin/javac"), [
@@ -272,17 +277,11 @@ try {
   check("Dart package", "dart", ["run", "bin/check.dart", library], {
     cwd: join(installed, "bindings/dart"),
   });
-  const swiftArgs = [
-    "-Xlinker",
-    `-L${installed}`,
-    "-Xlinker",
-    "-rpath",
-    "-Xlinker",
-    installed,
-    ...(process.platform === "linux"
+  // Swift loads the C ABI at runtime, so only the Linux segment policy applies.
+  const swiftArgs =
+    process.platform === "linux"
       ? ["-Xlinker", "-z", "-Xlinker", "separate-code"]
-      : []),
-  ];
+      : [];
   run("swift", [
     "build",
     "-c",
@@ -305,7 +304,7 @@ try {
     ],
     { cwd: installed, encoding: "utf8" },
   ).trim();
-  check("Swift package", join(swiftDirectory, "BindingCheck"), []);
+  check("Swift package", join(swiftDirectory, "BindingCheck"), [library]);
   const rustConsumer = join(directory, "rust-consumer");
   mkdirSync(join(rustConsumer, "src"), { recursive: true });
   writeFileSync(

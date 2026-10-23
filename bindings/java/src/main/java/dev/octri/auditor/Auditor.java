@@ -13,6 +13,11 @@ public final class Auditor {
           .enable(DeserializationFeature.USE_BIG_INTEGER_FOR_INTS)
           .enable(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS);
 
+  /** Loads the native library pair packaged in this jar for the current platform. */
+  public Auditor() throws IOException {
+    NativeBridge.loadBundled();
+  }
+
   public Auditor(String library, String bridge) {
     NativeBridge.load(library, bridge);
   }

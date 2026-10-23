@@ -6,8 +6,8 @@ let package = Package(
   platforms: [.macOS(.v13)],
   products: [.library(name: "OctriSpecAuditor", targets: ["OctriSpecAuditor"])],
   targets: [
-    .systemLibrary(name: "COctriAuditor"),
-    .target(name: "OctriSpecAuditor", dependencies: ["COctriAuditor"]),
+    // Release builds place each platform's native library under native/.
+    .target(name: "OctriSpecAuditor", resources: [.copy("native")]),
     .executableTarget(
       name: "BindingCheck", dependencies: ["OctriSpecAuditor"], path: "Tests/BindingCheck"),
   ]

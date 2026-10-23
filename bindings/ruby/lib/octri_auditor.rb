@@ -15,7 +15,11 @@ module OctriAuditor
   end
 
   class Auditor
-    def initialize(library)
+    # Platform gems carry the native library under lib/octri_auditor/native.
+    BUNDLED_LIBRARY = File.join(__dir__, 'octri_auditor', 'native',
+                                RUBY_PLATFORM.include?('darwin') ? 'liboctri_auditor_ffi.dylib' : 'liboctri_auditor_ffi.so')
+
+    def initialize(library = BUNDLED_LIBRARY)
       @library = Fiddle.dlopen(File.realpath(library))
       @version = function('abi_version', [], Fiddle::TYPE_INT)
       raise 'Expected auditor ABI version 1' unless @version.call == 1

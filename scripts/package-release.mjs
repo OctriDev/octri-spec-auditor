@@ -13,6 +13,7 @@ import {
 } from "node:fs";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
+import { version } from "./native-build.mjs";
 
 const root = process.cwd();
 const release = resolve("artifacts/releases");
@@ -45,15 +46,18 @@ run(
     "build",
     "octri-spec-auditor.gemspec",
     "--output",
-    join(release, "octri-spec-auditor-0.1.0.gem"),
+    join(release, `octri-spec-auditor-${version}.gem`),
   ],
   { cwd: join(root, "bindings/ruby") },
 );
 for (const [source, output] of [
-  ["bindings/java/target/spec-auditor-0.1.0.jar", "spec-auditor-0.1.0.jar"],
   [
-    "bindings/kotlin/target/spec-auditor-kotlin-0.1.0.jar",
-    "spec-auditor-kotlin-0.1.0.jar",
+    `bindings/java/target/spec-auditor-${version}.jar`,
+    `spec-auditor-${version}.jar`,
+  ],
+  [
+    `bindings/kotlin/target/spec-auditor-kotlin-${version}.jar`,
+    `spec-auditor-kotlin-${version}.jar`,
   ],
 ])
   copyFileSync(source, join(release, output));
@@ -73,7 +77,7 @@ try {
     "vendor/snapshot.json",
   ])
     copyFileSync(file, join(bundle, file.split("/").at(-1)));
-  for (const directory of ["bindings", "docs", "schemas", "crates", "vendor"])
+  for (const directory of ["bindings", "schemas", "crates", "vendor"])
     cpSync(directory, join(bundle, directory), {
       recursive: true,
       filter: (source) =>
@@ -116,7 +120,7 @@ try {
       "-czf",
       join(
         release,
-        `octri-spec-auditor-0.1.0-${process.platform}-${process.arch}.tar.gz`,
+        `octri-spec-auditor-${version}-${process.platform}-${process.arch}.tar.gz`,
       ),
       "-C",
       staging,

@@ -43,7 +43,7 @@ const targets = [
   ],
   ["php", "php", ["-d", "ffi.enable=true", "bindings/php/check.php", library]],
   ["ruby", "ruby", ["bindings/ruby/check.rb", library]],
-  ["swift", build.swiftCheck, []],
+  ["swift", build.swiftCheck, [library]],
   ["dart", build.dartCheck, [library]],
 ];
 const source = readFileSync("fixtures/pets.yaml", "utf8");
