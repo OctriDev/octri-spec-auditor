@@ -8,9 +8,6 @@ fn error(code: &str, message: impl Into<String>) -> String {
     octri_auditor::wire::encode::<()>(Err(AuditError::new(code, message)))
 }
 pub fn dispatch(input: &[u8]) -> String {
-    if input.len() > MAX_INPUT_BYTES {
-        return error("LIMIT_REQUEST_BYTES", "Auditor envelope exceeds 128 MiB");
-    }
     match str::from_utf8(input) {
         Ok(input) => octri_auditor::wire::dispatch(input),
         Err(_) => error("INVALID_ENCODING", "Auditor request must be UTF-8"),

@@ -1,8 +1,6 @@
 import { execFileSync } from "node:child_process";
 import { copyFileSync, appendFileSync } from "node:fs";
-import { rustEnvironment } from "./toolchain.mjs";
 
-const env = rustEnvironment();
 execFileSync(
   "cargo",
   [
@@ -14,7 +12,7 @@ execFileSync(
     "--target",
     "wasm32-unknown-unknown",
   ],
-  { stdio: "inherit", env },
+  { stdio: "inherit" },
 );
 execFileSync(
   "wasm-bindgen",
@@ -27,7 +25,7 @@ execFileSync(
     "--out-name",
     "octri_auditor",
   ],
-  { stdio: "inherit", env },
+  { stdio: "inherit" },
 );
 copyFileSync("packages/shared/client.mjs", "packages/browser/client.mjs");
 copyFileSync("packages/shared/numbers.mjs", "packages/browser/numbers.mjs");

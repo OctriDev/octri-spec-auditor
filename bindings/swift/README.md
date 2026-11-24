@@ -5,7 +5,7 @@ will generate SDKs, docs and MCP tools, offline, with Octri's Rust auditor.
 
 ```sh
 # Package.swift
-.package(url: "https://github.com/octridev/octri-spec-auditor-swift", from: "0.1.3")
+.package(url: "https://github.com/octridev/octri-spec-auditor-swift", from: "0.2.0")
 ```
 
 ```swift

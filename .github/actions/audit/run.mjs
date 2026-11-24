@@ -15,15 +15,8 @@ const directory = mkdtempSync(
 );
 const target = join(directory, "target");
 const build = spawnSync(
-  process.execPath,
-  [
-    join(root, "scripts/cargo.mjs"),
-    "build",
-    "--release",
-    "--locked",
-    "-p",
-    "octri-auditor-cli",
-  ],
+  "cargo",
+  ["build", "--release", "--locked", "-p", "octri-auditor-cli"],
   {
     cwd: root,
     env: { ...process.env, CARGO_TARGET_DIR: target },
