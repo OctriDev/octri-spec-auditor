@@ -4,16 +4,8 @@ export const DEFAULT_URI = "memory://audit/openapi.yaml";
 const encoder = new TextEncoder();
 
 export function checkFiles(files, limits = {}) {
-  const perFile = Math.min(
-    limits.maxDocumentBytes ?? 5 * 1024 * 1024,
-    24 * 1024 * 1024,
-  );
-  const totalLimit = Math.min(
-    limits.maxTotalBytes ?? 20 * 1024 * 1024,
-    64 * 1024 * 1024,
-  );
-  if (files.size > Math.min(limits.maxDocuments ?? 100, 100))
-    throw new Error("Input exceeds the configured file-count limit.");
+  const perFile = limits.maxDocumentBytes ?? 5 * 1024 * 1024;
+  const totalLimit = limits.maxTotalBytes ?? 20 * 1024 * 1024;
   let total = 0;
   for (const [name, content] of files) {
     const bytes = encoder.encode(content).length;

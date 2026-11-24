@@ -5,8 +5,12 @@ import Ajv from "ajv/dist/2020.js";
 import SwaggerParser from "@apidevtools/swagger-parser";
 import { Auditor } from "../packages/node/index.mjs";
 
-const validate = new Ajv({ strict: false, allErrors: true }).compile(
+const ajv = new Ajv({ strict: false, allErrors: true });
+const validate = ajv.compile(
   JSON.parse(readFileSync("schemas/report.schema.json", "utf8")),
+);
+const validateConfig = ajv.compile(
+  JSON.parse(readFileSync("schemas/config.schema.json", "utf8")),
 );
 const content = readFileSync("fixtures/clean.json", "utf8");
 const request = {
@@ -49,6 +53,10 @@ const fixed = await Auditor.fix({
   ),
 });
 await SwaggerParser.validate(JSON.parse(fixed.revised.input.content));
+// An exported baseline must satisfy the config schema the engine accepts it under.
+const baseline = await Auditor.export(report, "baseline");
+assert.ok(validateConfig({ baseline }), JSON.stringify(validateConfig.errors));
+await Auditor.audit({ ...failing, config: { baseline } });
 assert.ok(validate(fixed.report), JSON.stringify(validate.errors));
 const wire = JSON.parse(
   execFileSync("target/release/octri-spec-audit", ["execute"], {

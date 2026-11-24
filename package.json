@@ -1,6 +1,6 @@
 {
   "name": "octri-spec-auditor-workspace",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "engines": {
@@ -17,7 +17,7 @@
     "test:browser": "node web/browser-test.mjs",
     "dev": "node web/serve.mjs",
     "package:web": "node scripts/build-wasm.mjs && node scripts/package-web.mjs",
-    "check": "node scripts/cargo.mjs test --workspace"
+    "check": "cargo test --workspace"
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "12.1.0",

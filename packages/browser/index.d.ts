@@ -54,7 +54,6 @@ export interface Baseline {
 export interface Limits {
   maxDocumentBytes: number;
   maxTotalBytes: number;
-  maxDocuments: number;
   maxNodes: number;
   maxDepth: number;
 }
@@ -69,7 +68,6 @@ export interface Config {
   failOnNew?: boolean;
   failOn?: Severity;
   asOf?: string | null;
-  maxFindings?: number;
 }
 export interface AuditRequest {
   input: Source;

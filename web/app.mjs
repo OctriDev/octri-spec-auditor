@@ -125,7 +125,7 @@ function loadRequest(request) {
   renderSources();
   const limits = request.config?.limits ?? {};
   $("input-limits").textContent =
-    `${(limits.maxDocumentBytes ?? 5 * 1024 * 1024) / 1024 / 1024} MiB per file · ${limits.maxDocuments ?? 100} files · ${(limits.maxTotalBytes ?? 20 * 1024 * 1024) / 1024 / 1024} MiB total. References resolve only within supplied files. Source stays on this device.`;
+    `${(limits.maxDocumentBytes ?? 5 * 1024 * 1024) / 1024 / 1024} MiB per file · ${(limits.maxTotalBytes ?? 20 * 1024 * 1024) / 1024 / 1024} MiB total. References resolve only within supplied files. Source stays on this device.`;
 }
 
 async function execute(action, fields) {

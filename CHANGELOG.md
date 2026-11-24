@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.2.0
+
+- Vendors octri-parser 0.2.0. Requests that send a removed config field fail
+  with `INVALID_REQUEST`.
+- Removed `limits.maxDocuments` and `maxFindings`. Reports no longer stop at a
+  finding count, so large specifications are no longer marked incomplete.
+- Removed the policy ceilings: 32 profiles, 10,000 ignored keys, exclusions and
+  baseline fingerprints, and the 24 MiB, 64 MiB, 1,000,000-node and depth-128
+  caps on configured limits. The request byte cap still applies.
+- `limits.maxNodes` bounds reference expansion only, as in the parser.
+- Results larger than 128 MiB are returned instead of `LIMIT_OUTPUT_BYTES`.
+- Build scripts call `cargo` directly; `scripts/cargo.mjs` and its
+  `~/.cache/octri-rust` toolchain lookup are gone.
+- `config.schema.json` accepts exported baselines: it required ruleset `1.0.0`
+  while the engine writes and accepts `1.0.3`.
+- npm packages and browser assets ship as `0.2.0`.
+
 ## 0.1.3
 
 - Publish the language bindings: PyPI, RubyGems, Maven Central, pub.dev and crates.io packages, Go, PHP and Swift mirror repositories, and C archives on the GitHub release. Each package carries the native library for Linux x64 and arm64 (glibc 2.36+) and macOS arm64, and its no-argument constructor loads it.

@@ -62,8 +62,7 @@ for (const script of [
 ])
   run(process.execPath, [`scripts/${script}.mjs`]);
 run(process.execPath, ["--test", "packages/node/test.mjs"]);
-run(process.execPath, [
-  "scripts/cargo.mjs",
+run("cargo", [
   "clippy",
   "--workspace",
   "--all-targets",
@@ -71,5 +70,5 @@ run(process.execPath, [
   "-D",
   "warnings",
 ]);
-run(process.execPath, ["scripts/cargo.mjs", "test", "--workspace"]);
+run("cargo", ["test", "--workspace"]);
 console.log(`Current-source Linux ${process.arch} qualification passed`);

@@ -10,7 +10,6 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { delimiter, join, resolve } from "node:path";
-import { rustEnvironment } from "./toolchain.mjs";
 import { version } from "./native-build.mjs";
 
 const directory = mkdtempSync(join(tmpdir(), "octri-auditor-consumer-"));
@@ -318,7 +317,7 @@ try {
   run("cargo", ["run", "--quiet", "--offline"], {
     cwd: rustConsumer,
     env: {
-      ...rustEnvironment(),
+      ...process.env,
       CARGO_TARGET_DIR: resolve("target/installed-consumer"),
     },
     input: envelope,

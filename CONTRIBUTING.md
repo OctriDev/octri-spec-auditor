@@ -7,9 +7,9 @@ Contributions are welcome. Preserve the project license and third-party notices,
 ```sh
 npm ci --ignore-scripts
 node scripts/verify-vendor.mjs
-node scripts/cargo.mjs fmt --all -- --check
-node scripts/cargo.mjs clippy --workspace --all-targets -- -D warnings
-node scripts/cargo.mjs test --workspace
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+cargo test --workspace
 npm run build:node
 npm run test:node
 node scripts/contract-test.mjs

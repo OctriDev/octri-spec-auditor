@@ -27,12 +27,12 @@ own registries and bundle the native library for the same platforms; see
 
 ## Run locally
 
-Requirements: Node.js 22.19 or newer and the pinned Rust 1.95 toolchain. The helper installs Rust into an isolated cache when no suitable toolchain exists.
+Requirements: Node.js 22.19 or newer and the pinned Rust 1.95 toolchain.
 
 ```sh
 npm ci --ignore-scripts
-node scripts/cargo.mjs test --workspace
-node scripts/cargo.mjs build --release -p octri-auditor-cli
+cargo test --workspace
+cargo build --release -p octri-auditor-cli
 target/release/octri-spec-audit audit fixtures/pets.yaml
 npm run build:node
 npm run test:node

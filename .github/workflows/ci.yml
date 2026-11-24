@@ -15,11 +15,11 @@ jobs:
           node-version: 24.19.0
       - run: npm ci --ignore-scripts
       - run: node scripts/verify-vendor.mjs
-      - run: node scripts/cargo.mjs fmt --all -- --check
-      - run: node scripts/cargo.mjs clippy --workspace --all-targets -- -D warnings
-      - run: node scripts/cargo.mjs test --workspace
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --workspace --all-targets -- -D warnings
+      - run: cargo test --workspace
       - run: npm run format:check
-      - run: node scripts/cargo.mjs build --release --locked -p octri-auditor-cli
+      - run: cargo build --release --locked -p octri-auditor-cli
       - run: npm run build:node && npm run test:node
       - run: node scripts/contract-test.mjs
       - run: node scripts/performance.mjs
@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: 24.19.0
       - run: npm ci --ignore-scripts
-      - run: node scripts/cargo.mjs build --release -p octri-auditor-cli
+      - run: cargo build --release -p octri-auditor-cli
       - run: cargo install wasm-bindgen-cli --version 0.2.129 --locked
       - run: npm run build:wasm
       - run: npx playwright install --with-deps chromium firefox webkit
